@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
                 val = (int) (Math.random() * 80);
                 val2 = gauss.nextGaussian();
 
-                saveToCsv("/sdcard/csv_dir/", String.valueOf(counter), String.valueOf(val));
+                saveToCsv("/sdcard/csv_dir/", String.valueOf(counter), String.valueOf(val), false);
+                saveToCsv("/sdcard/csv_dir/", String.valueOf(counter), String.valueOf(val2), true);
 
                 counter += 1;
                 mHandlar.postDelayed(this, 500);
@@ -137,11 +138,18 @@ public class MainActivity extends AppCompatActivity {
         return dataVals;
     }
 
-    private void saveToCsv(String path, String str1, String str2) {
+    private void saveToCsv(String path, String str1, String str2, boolean isNormal) {
         try {
             File file = new File(path);
             file.mkdirs();
-            String csv = path + "data.csv";
+            String csv;
+            if (isNormal) {
+                csv = path + "data2.csv";
+            }
+            else {
+                csv = path + "data.csv";
+            }
+//            String csv = path + "data.csv";
             CSVWriter csvWriter = new CSVWriter(new FileWriter(csv, true));
             String row[] = new String[]{str1, str2};
             csvWriter.writeNext(row);

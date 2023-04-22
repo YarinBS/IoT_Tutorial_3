@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import android.graphics.Color;
+
 
 public class LoadCSV extends AppCompatActivity {
     @Override
@@ -30,13 +32,21 @@ public class LoadCSV extends AppCompatActivity {
         LineChart lineChart = (LineChart) findViewById(R.id.line_chart);
 
         ArrayList<String[]> csvData = new ArrayList<>();
+        ArrayList<String[]> csvData2 = new ArrayList<>();
 
-        csvData= CsvRead("/sdcard/csv_dir/data.csv");
-        LineDataSet lineDataSet1 =  new LineDataSet(DataValues(csvData),"Data Set 1");
+        csvData = CsvRead("/sdcard/csv_dir/data.csv");
+        csvData2 = CsvRead("/sdcard/csv_dir/data2.csv");
+        LineDataSet lineDataSet1 = new LineDataSet(DataValues(csvData, false),"Data Set 1");
+        LineDataSet lineDataSet2 = new LineDataSet(DataValues(csvData2, true),"Data Set 2");
+        lineDataSet2.setColor(Color.rgb(0, 255, 0));
+        lineDataSet2.setCircleColor(Color.rgb(0, 255, 0));
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(lineDataSet1);
+        dataSets.add(lineDataSet2);
         LineData data = new LineData(dataSets);
+//        LineData data2 = new LineData(dataSets.get(1));
         lineChart.setData(data);
+//        lineChart.setData(data2);
         lineChart.invalidate();
 
 
@@ -72,15 +82,17 @@ public class LoadCSV extends AppCompatActivity {
     return CsvData;
     }
 
-    private ArrayList<Entry> DataValues(ArrayList<String[]> csvData){
+    private ArrayList<Entry> DataValues(ArrayList<String[]> csvData, boolean isNormal){
         ArrayList<Entry> dataVals = new ArrayList<Entry>();
         for (int i = 0; i < csvData.size(); i++){
-
-            dataVals.add(new Entry(i,Integer.parseInt(csvData.get(i)[1])));
-
+            if (isNormal) {
+                dataVals.add(new Entry(i, Float.parseFloat(csvData.get(i)[1])));
+            }
+            else {
+                dataVals.add(new Entry(i, Integer.parseInt(csvData.get(i)[1])));
+            }
 
         }
-
             return dataVals;
     }
 
